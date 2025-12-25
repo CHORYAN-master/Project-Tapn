@@ -7,6 +7,8 @@ import {
 } from 'reactflow';
 import { VideoNode, ViewState, VideoNodeData } from '@/types/schema';
 
+const PUBLISHED_KEY = 'tapn-published-projects';
+
 interface AppState {
   nodes: Node[];
   edges: Edge[];
@@ -14,7 +16,6 @@ interface AppState {
   selectedNodeId: string | null;
   startNodeId: string | null;
   currentView: ViewState;
-  isPublished: boolean;
 
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
@@ -28,10 +29,10 @@ interface AppState {
   setView: (view: ViewState) => void;
   updateNodeData: (id: string, data: Partial<VideoNodeData>) => void;
   syncEdges: () => void;
-  publishProject: () => void;
   saveProject: () => void;
   loadProject: () => void;
   resetProject: () => void;
+  publishProject: () => void;
 }
 
 const STORAGE_KEY = 'interactive-video-project';
@@ -43,7 +44,6 @@ export const useStore = create<AppState>((set, get) => ({
   selectedNodeId: null,
   startNodeId: null,
   currentView: 'home',
-  isPublished: false,
 
   onNodesChange: (changes) => set({ nodes: applyNodeChanges(changes, get().nodes) }),
   onEdgesChange: (changes) => set({ edges: applyEdgeChanges(changes, get().edges) }),
@@ -86,7 +86,6 @@ export const useStore = create<AppState>((set, get) => ({
   syncEdges: () => {
     const { nodes } = get();
     const newEdges: Edge[] = [];
-
     nodes.forEach((sourceNode) => {
       const choices = sourceNode.data.choices || [];
       choices.forEach((choice: any) => {
@@ -97,10 +96,7 @@ export const useStore = create<AppState>((set, get) => ({
             target: choice.targetNodeId,
             animated: true,
             style: { stroke: '#fff', strokeWidth: 2 },
-            markerEnd: {
-              type: MarkerType.ArrowClosed,
-              color: '#fff',
-            },
+            markerEnd: { type: MarkerType.ArrowClosed, color: '#fff' },
           });
         }
       });
@@ -108,15 +104,9 @@ export const useStore = create<AppState>((set, get) => ({
     set({ edges: newEdges });
   },
 
-  publishProject: () => {
-    set({ isPublished: true });
-    get().saveProject();
-    alert('🎉 TAPN에 공개되었습니다!');
-  },
-
   saveProject: () => {
-    const { nodes, edges, startNodeId, isPublished } = get();
-    const data = JSON.stringify({ nodes, edges, startNodeId, isPublished });
+    const { nodes, edges, startNodeId } = get();
+    const data = JSON.stringify({ nodes, edges, startNodeId });
     localStorage.setItem(STORAGE_KEY, data);
   },
 
@@ -128,8 +118,7 @@ export const useStore = create<AppState>((set, get) => ({
         set({ 
           nodes: parsed.nodes || [], 
           edges: parsed.edges || [],
-          startNodeId: parsed.startNodeId || null,
-          isPublished: parsed.isPublished || false
+          startNodeId: parsed.startNodeId || null
         });
       } catch (e) {
         console.error('Failed to load project:', e);
@@ -138,9 +127,29 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   resetProject: () => {
-    if (confirm('모든 내용을 초기화하시겠습니까?')) {
-      set({ nodes: [], edges: [], startNodeId: null, isPublished: false });
+    if (confirm('작업 내용을 초기화하시겠습니까?')) {
+      set({ nodes: [], edges: [], startNodeId: null });
       localStorage.removeItem(STORAGE_KEY);
     }
   },
+
+  publishProject: () => {
+    const { nodes, edges, startNodeId } = get();
+    
+    const newProject = {
+      id: Date.now().toString(),
+      title: nodes.find(n => n.id === startNodeId)?.data?.label || "제목 없는 프로젝트",
+      thumbnail: nodes.find(n => n.id === startNodeId)?.data?.videoUrl || "",
+      createdAt: new Date().toISOString(),
+      data: { nodes, edges, startNodeId }
+    };
+
+    const stored = localStorage.getItem(PUBLISHED_KEY);
+    const publishedList = stored ? JSON.parse(stored) : [];
+    const updatedList = [newProject, ...publishedList];
+    localStorage.setItem(PUBLISHED_KEY, JSON.stringify(updatedList));
+
+    alert("🚀 TAPN 홈에 성공적으로 게시되었습니다!");
+    set({ currentView: 'home' });
+  }
 }));

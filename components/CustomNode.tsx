@@ -6,13 +6,21 @@ import { Video, Disc, Play, X, Flag } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 
 const CustomNode = ({ id, data, selected }: NodeProps) => {
-  const { setPlayingNodeId, deleteNode, startNodeId } = useStore();
+  // ✨ setView 추가 (화면 전환 기능을 위해 필수)
+  const { setPlayingNodeId, deleteNode, startNodeId, setView } = useStore();
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (confirm('이 장면을 삭제하시겠습니까?')) {
       deleteNode(id);
     }
+  };
+
+  // ✨ 핵심 수정: 재생 버튼 클릭 핸들러
+  const handlePlay = (e: React.MouseEvent) => {
+    e.stopPropagation(); // 노드 선택과 겹치지 않게 방지
+    setPlayingNodeId(id); // 1. 어떤 영상을 틀지 정하고
+    setView('player');    // 2. 화면을 '플레이어 모드'로 바꿈!
   };
 
   const isStartNode = startNodeId === id;
@@ -39,8 +47,9 @@ const CustomNode = ({ id, data, selected }: NodeProps) => {
       </div>
 
       <div className="p-3">
+        {/* ✨ 여기가 수정된 재생 버튼 부분입니다 */}
         <div 
-          onClick={() => setPlayingNodeId(id)}
+          onClick={handlePlay} 
           className="h-24 bg-gray-100 rounded-md flex flex-col items-center justify-center text-gray-700 mb-3 relative overflow-hidden group cursor-pointer hover:bg-gray-200 transition-colors border border-gray-200"
         >
           {data.videoUrl ? (
