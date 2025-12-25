@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useStore } from '@/store/useStore';
-import { X, Upload, Trash2, Plus, Check, RefreshCw, Flag, Youtube, Loader2 } from 'lucide-react';
+import { X, Upload, Trash2, Plus, Check, RefreshCw, Flag, Youtube, Loader2, Film } from 'lucide-react';
 
 export default function Sidebar() {
   const { nodes, selectedNodeId, setSelectedNodeId, updateNodeData, startNodeId, setStartNodeId, syncEdges } = useStore();
@@ -102,16 +102,13 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile Backdrop */}
       <div 
         className="fixed inset-0 bg-black/50 z-40 md:hidden"
         onClick={() => setSelectedNodeId(null)}
       />
       
-      {/* Sidebar */}
       <div className="fixed md:absolute top-0 md:top-4 right-0 md:right-4 w-full md:w-96 h-full md:h-auto md:max-h-[90vh] bg-white md:rounded-xl shadow-2xl border-0 md:border border-gray-200 flex flex-col overflow-hidden z-50">
         
-        {/* Header */}
         <div className="p-4 bg-gray-50 border-b flex justify-between items-center shrink-0">
           <h3 className="font-extrabold text-black text-base md:text-lg flex items-center gap-2">
             <span className="w-2 h-5 md:h-6 bg-blue-600 rounded-full" />
@@ -126,10 +123,8 @@ export default function Sidebar() {
           </button>
         </div>
 
-        {/* Content */}
         <div className="p-4 md:p-5 overflow-y-auto flex-1 space-y-4 md:space-y-6">
           
-          {/* Start Node Toggle */}
           <div 
             onClick={toggleStartNode}
             className={`p-3 rounded-xl border-2 cursor-pointer transition-all flex items-center gap-3 active:scale-95 ${isStartNode ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
@@ -145,7 +140,6 @@ export default function Sidebar() {
             </div>
           </div>
 
-          {/* Scene Name */}
           <div className="space-y-1">
             <label className="text-[10px] md:text-xs font-extrabold text-black uppercase tracking-wider">Scene Name</label>
             <input 
@@ -157,7 +151,6 @@ export default function Sidebar() {
             />
           </div>
 
-          {/* Question */}
           <div className="space-y-1">
             <label className="text-[10px] md:text-xs font-extrabold text-black uppercase tracking-wider">Question</label>
             <textarea 
@@ -169,7 +162,6 @@ export default function Sidebar() {
             />
           </div>
 
-          {/* Video Source */}
           <div className="space-y-3">
             <label className="text-[10px] md:text-xs font-extrabold text-black uppercase tracking-wider">Video Source</label>
             
@@ -193,19 +185,28 @@ export default function Sidebar() {
             </div>
 
             {localData.videoUrl ? (
-              <div className="relative border-2 border-green-500 rounded-xl overflow-hidden aspect-video group bg-black">
-                {/* 썸네일 표시 - YouTube는 아이콘, MP4는 video 태그 */}
+              <div className="relative border-2 border-green-500 rounded-xl overflow-hidden aspect-video group bg-gradient-to-br from-gray-900 to-gray-800">
                 {isYouTube ? (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-gray-900">
-                    <Youtube size={32} className="md:w-10 md:h-10 text-red-500 mb-2" />
-                    <span className="text-xs font-bold text-gray-300">YouTube 영상</span>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <Youtube size={48} className="text-red-500 mb-3" />
+                    <span className="text-sm font-bold text-white">YouTube 영상</span>
+                    <span className="text-xs text-gray-400 mt-1">미리보기 지원 안 됨</span>
                   </div>
                 ) : (
-                  <video 
-                    src={localData.videoUrl} 
-                    className="w-full h-full object-cover"
-                    preload="metadata"
-                  />
+                  <>
+                    <video 
+                      src={localData.videoUrl}
+                      className="w-full h-full object-cover"
+                      preload="metadata"
+                      muted
+                      playsInline
+                      onError={() => console.error('Video load error')}
+                    />
+                    <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
+                      <Film size={12} />
+                      <span>MP4</span>
+                    </div>
+                  </>
                 )}
                 
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -249,7 +250,6 @@ export default function Sidebar() {
             )}
           </div>
 
-          {/* Choices */}
           <div className="space-y-3 pt-3 md:pt-4 border-t border-gray-100">
             <div className="flex justify-between items-end">
               <label className="text-[10px] md:text-xs font-extrabold text-black uppercase tracking-wider">Choices</label>
@@ -300,7 +300,6 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="p-3 md:p-4 bg-white border-t shrink-0">
           <button 
             onClick={handleApply}
