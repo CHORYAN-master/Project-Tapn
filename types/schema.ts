@@ -18,9 +18,14 @@ export interface VideoNode extends Node {
   data: VideoNodeData;
 }
 
-export type ViewState = 'home' | 'editor' | 'player';
+// ✨ 여기에 'dashboard'를 추가했습니다!
+export type ViewState = 'home' | 'editor' | 'player' | 'dashboard';
 
 export interface ProjectData {
+  id: string;
+  title: string;
+  thumbnail: string;
+  updatedAt: string;
   nodes: VideoNode[];
   edges: any[];
   startNodeId: string | null;

@@ -2,10 +2,10 @@
 
 import React, { useCallback } from 'react';
 import { useStore } from '@/store/useStore';
-import { Save, FolderOpen, RotateCcw, Plus, Home, UploadCloud } from 'lucide-react';
+import { Save, Plus, UploadCloud, ArrowLeft, Edit2 } from 'lucide-react';
 
 export default function Toolbar() {
-  const { saveProject, loadProject, resetProject, addNode, nodes, setView, publishProject } = useStore();
+  const { saveDraft, addNode, nodes, setView, publishProject, projectTitle, setProjectTitle } = useStore();
 
   const handleAddNode = useCallback(() => {
     const id = Math.random().toString(36).substr(2, 9);
@@ -23,55 +23,53 @@ export default function Toolbar() {
   }, [addNode, nodes.length]);
 
   return (
-    <div className="flex gap-2 p-2 bg-white/90 backdrop-blur shadow-lg rounded-lg border border-gray-200">
+    <div className="flex gap-2 p-2 bg-white/90 backdrop-blur shadow-lg rounded-lg border border-gray-200 items-center">
       
+      {/* 나가기 */}
       <button 
-        onClick={() => setView('home')} 
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+        onClick={() => setView('dashboard')} 
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
       >
-        <Home size={16} />
+        <ArrowLeft size={16} />
       </button>
 
       <div className="w-px h-6 bg-gray-300 mx-1" />
 
+      {/* ✨ 영상 제목 입력 필드 (가장 중요한 부분) */}
+      <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-md border focus-within:ring-2 focus-within:ring-blue-500 focus-within:bg-white transition-all flex-1 min-w-[200px]">
+        <Edit2 size={14} className="text-gray-400" />
+        <input 
+          value={projectTitle}
+          onChange={(e) => setProjectTitle(e.target.value)}
+          placeholder="영상 제목을 입력하세요"
+          className="bg-transparent border-none outline-none text-sm font-bold text-gray-800 w-full placeholder:text-gray-400"
+        />
+      </div>
+
+      <div className="w-px h-6 bg-gray-300 mx-1" />
+
+      {/* 씬 추가 */}
       <button 
         onClick={handleAddNode} 
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors"
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors whitespace-nowrap"
       >
-        <Plus size={16} /> Add Scene
+        <Plus size={16} /> 씬 추가
       </button>
 
-      <div className="w-px h-6 bg-gray-300 mx-1" />
-
+      {/* 저장 */}
       <button 
-        onClick={saveProject} 
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+        onClick={saveDraft} 
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-gray-700 hover:bg-gray-100 rounded-md transition-colors whitespace-nowrap"
       >
-        <Save size={16} /> Save
-      </button>
-      
-      <button 
-        onClick={loadProject} 
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-      >
-        <FolderOpen size={16} /> Load
+        <Save size={16} /> 저장
       </button>
 
-      <button 
-        onClick={resetProject} 
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-bold text-red-500 hover:bg-red-50 rounded-md transition-colors"
-      >
-        <RotateCcw size={16} /> Reset
-      </button>
-
-      <div className="w-px h-6 bg-gray-300 mx-1" />
-
-      {/* ✨ 내보내기(게시) 버튼 */}
+      {/* 게시 */}
       <button 
         onClick={publishProject} 
-        className="flex items-center gap-1.5 px-4 py-1.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-md transition-all animate-pulse hover:animate-none"
+        className="flex items-center gap-1.5 px-4 py-1.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-md transition-all animate-pulse hover:animate-none whitespace-nowrap"
       >
-        <UploadCloud size={16} /> TAPN으로 내보내기
+        <UploadCloud size={16} /> 게시
       </button>
 
     </div>
