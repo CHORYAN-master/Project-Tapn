@@ -2,17 +2,22 @@
 
 import React, { memo } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
-import { Video, Disc, Play, X, Flag } from 'lucide-react';
+import { Video, Disc, Play, X, Flag, Edit3 } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 
 const CustomNode = ({ id, data, selected }: NodeProps) => {
-  const { setPlayingNodeId, deleteNode, startNodeId, setView } = useStore();
+  const { setPlayingNodeId, deleteNode, startNodeId, setView, setSelectedNodeId } = useStore();
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (confirm('이 장면을 삭제하시겠습니까?')) {
       deleteNode(id);
     }
+  };
+
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedNodeId(id);
   };
 
   const handlePlay = (e: React.MouseEvent) => {
@@ -32,6 +37,16 @@ const CustomNode = ({ id, data, selected }: NodeProps) => {
         </div>
       )}
 
+      {/* 편집 버튼 - 우측 상단 */}
+      <button 
+        onClick={handleEdit}
+        className="absolute top-2 right-2 z-50 bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-3 py-1.5 text-xs font-bold shadow-md opacity-0 group-hover/node:opacity-100 transition-all flex items-center gap-1"
+      >
+        <Edit3 size={12} />
+        편집
+      </button>
+
+      {/* 삭제 버튼 */}
       <button 
         onClick={handleDelete}
         className="absolute -top-2 md:-top-3 -right-2 md:-right-3 z-50 bg-white border border-gray-200 text-gray-400 hover:text-red-600 hover:border-red-300 rounded-full p-1 md:p-1.5 shadow-sm opacity-0 group-hover/node:opacity-100 transition-all scale-90 hover:scale-100 active:scale-75"

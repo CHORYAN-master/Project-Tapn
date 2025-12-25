@@ -113,14 +113,14 @@ export default function Sidebar() {
       
       <div className="fixed md:absolute top-0 md:top-4 right-0 md:right-4 w-full md:w-96 h-full md:h-auto md:max-h-[90vh] bg-white md:rounded-xl shadow-2xl border-0 md:border border-gray-200 flex flex-col overflow-hidden z-50">
         
-        <div className="p-4 bg-gray-50 border-b flex justify-between items-center shrink-0">
-          <h3 className="font-extrabold text-black text-base md:text-lg flex items-center gap-2">
-            <span className="w-2 h-5 md:h-6 bg-blue-600 rounded-full" />
+        <div className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 border-b flex justify-between items-center shrink-0">
+          <h3 className="font-extrabold text-white text-base md:text-lg flex items-center gap-2">
+            <span className="w-2 h-5 md:h-6 bg-white rounded-full" />
             Scene Editor
           </h3>
           <button 
             onClick={() => setSelectedNodeId(null)} 
-            className="text-gray-500 hover:text-red-600 transition-colors p-1 hover:bg-red-50 rounded-full"
+            className="text-white hover:bg-white/20 transition-colors p-2 rounded-full"
             aria-label="닫기 (ESC)"
           >
             <X size={20} />
@@ -133,7 +133,7 @@ export default function Sidebar() {
           </div>
         )}
 
-        <div className="p-4 md:p-5 overflow-y-auto flex-1 space-y-4 md:space-y-6">
+        <div className="p-4 md:p-5 overflow-y-auto flex-1 space-y-5 md:space-y-6">
           
           <div 
             onClick={toggleStartNode}
@@ -150,50 +150,44 @@ export default function Sidebar() {
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] md:text-xs font-extrabold text-black uppercase tracking-wider">Scene Name</label>
+          {/* 1. SCENE NAME */}
+          <div className="space-y-2 p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <label className="text-sm md:text-base font-extrabold text-gray-900 flex items-center gap-2">
+              <span className="text-blue-600">①</span>
+              SCENE NAME <span className="text-gray-500 font-normal text-xs">(장면 이름)</span>
+            </label>
             <input 
               name="label" 
               value={localData.label} 
               onChange={handleChange}
-              className="w-full p-2.5 md:p-3 border border-gray-300 rounded-lg text-sm md:text-base text-black font-bold focus:ring-2 focus:ring-blue-500 outline-none"
-              placeholder="장면 이름"
+              className="w-full p-3 border-2 border-gray-300 rounded-lg text-sm md:text-base text-black font-bold focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              placeholder="예: 오프닝, 엔딩, 분기점 등"
             />
           </div>
 
-          <div className="space-y-1">
-            <label className="text-[10px] md:text-xs font-extrabold text-black uppercase tracking-wider">Question</label>
+          {/* 2. QUESTION */}
+          <div className="space-y-2 p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <label className="text-sm md:text-base font-extrabold text-gray-900 flex items-center gap-2">
+              <span className="text-purple-600">②</span>
+              QUESTION <span className="text-gray-500 font-normal text-xs">(질문/대사)</span>
+            </label>
             <textarea 
               name="question" 
               value={localData.question} 
               onChange={handleChange}
-              className="w-full p-2.5 md:p-3 border border-gray-300 rounded-lg text-sm md:text-base text-black font-bold focus:ring-2 focus:ring-blue-500 outline-none resize-none h-20 md:h-24"
-              placeholder="질문 입력"
+              className="w-full p-3 border-2 border-gray-300 rounded-lg text-sm md:text-base text-black font-bold focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none resize-none h-24 transition-all"
+              placeholder="시청자에게 보여줄 질문이나 대사를 입력하세요"
             />
           </div>
 
-          <div className="space-y-3">
-            <label className="text-[10px] md:text-xs font-extrabold text-black uppercase tracking-wider">Video Source</label>
+          {/* 3. VIDEO SOURCE */}
+          <div className="space-y-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <label className="text-sm md:text-base font-extrabold text-gray-900 flex items-center gap-2">
+              <span className="text-green-600">③</span>
+              VIDEO SOURCE <span className="text-gray-500 font-normal text-xs">(영상 소스)</span>
+            </label>
             
-            <div className="flex gap-2 items-center">
-              <div className="p-1.5 md:p-2 bg-red-100 text-red-600 rounded-lg shrink-0">
-                <Youtube size={16} className="md:w-[18px] md:h-[18px]" />
-              </div>
-              <input 
-                name="videoUrl" 
-                value={localData.videoUrl} 
-                onChange={handleChange}
-                placeholder="YouTube URL..." 
-                className="flex-1 p-2 border border-gray-300 rounded-lg text-xs font-medium focus:ring-2 focus:ring-red-500 outline-none min-w-0"
-              />
-            </div>
-
-            <div className="relative flex py-1 items-center">
-              <div className="flex-grow border-t border-gray-200" />
-              <span className="flex-shrink-0 mx-3 md:mx-4 text-gray-400 text-[10px] font-bold uppercase">OR</span>
-              <div className="flex-grow border-t border-gray-200" />
-            </div>
-
+            {/* 파일 업로드 우선 */}
             {localData.videoUrl ? (
               <div className="relative border-2 border-green-500 rounded-xl overflow-hidden aspect-video group bg-gradient-to-br from-green-50 to-blue-50">
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -231,88 +225,120 @@ export default function Sidebar() {
                 </div>
               </div>
             ) : (
-              <div className={`border-2 border-dashed rounded-xl p-4 md:p-6 text-center transition-all relative group cursor-pointer ${isUploading ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:bg-blue-50'}`}>
-                <input 
-                  type="file" 
-                  accept="video/*" 
-                  onChange={handleFileUpload} 
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  disabled={isUploading}
-                />
-                <div className="flex flex-col items-center gap-2 text-gray-400 group-hover:text-blue-600">
-                  {isUploading ? (
-                    <>
-                      <Loader2 size={24} className="md:w-7 md:h-7 animate-spin text-blue-600" />
-                      <span className="text-xs md:text-sm font-bold text-blue-600">업로드 중...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Upload size={24} className="md:w-7 md:h-7" />
-                      <span className="text-xs md:text-sm font-bold">Click to Upload</span>
-                    </>
-                  )}
+              <>
+                <div className={`border-2 border-dashed rounded-xl p-5 md:p-6 text-center transition-all relative group cursor-pointer ${isUploading ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:bg-blue-50 hover:border-blue-400'}`}>
+                  <input 
+                    type="file" 
+                    accept="video/*" 
+                    onChange={handleFileUpload} 
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    disabled={isUploading}
+                  />
+                  <div className="flex flex-col items-center gap-2 text-gray-400 group-hover:text-blue-600">
+                    {isUploading ? (
+                      <>
+                        <Loader2 size={32} className="animate-spin text-blue-600" />
+                        <span className="text-sm md:text-base font-bold text-blue-600">업로드 중...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload size={32} />
+                        <span className="text-sm md:text-base font-bold">파일 업로드</span>
+                        <span className="text-xs text-gray-500">MP4, MOV 등</span>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
+
+                <div className="relative flex py-2 items-center">
+                  <div className="flex-grow border-t border-gray-300" />
+                  <span className="flex-shrink-0 mx-4 text-gray-400 text-xs font-bold">OR</span>
+                  <div className="flex-grow border-t border-gray-300" />
+                </div>
+
+                <div className="flex gap-2 items-center">
+                  <div className="p-2 bg-red-100 text-red-600 rounded-lg shrink-0">
+                    <Youtube size={18} />
+                  </div>
+                  <input 
+                    name="videoUrl" 
+                    value={localData.videoUrl} 
+                    onChange={handleChange}
+                    placeholder="YouTube URL 입력..." 
+                    className="flex-1 p-2.5 border-2 border-gray-300 rounded-lg text-sm font-medium focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none min-w-0 transition-all"
+                  />
+                </div>
+              </>
             )}
           </div>
 
-          <div className="space-y-3 pt-3 md:pt-4 border-t border-gray-100">
-            <div className="flex justify-between items-end">
-              <label className="text-[10px] md:text-xs font-extrabold text-black uppercase tracking-wider">Choices</label>
+          {/* 4. CHOICES */}
+          <div className="space-y-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <div className="flex justify-between items-center">
+              <label className="text-sm md:text-base font-extrabold text-gray-900 flex items-center gap-2">
+                <span className="text-orange-600">④</span>
+                CHOICES <span className="text-gray-500 font-normal text-xs">(선택지)</span>
+              </label>
               <button 
                 onClick={addChoice} 
-                className="flex items-center gap-1 text-xs font-bold bg-blue-100 text-blue-700 px-2.5 md:px-3 py-1.5 rounded-full hover:bg-blue-200 active:scale-95 transition-transform"
+                className="flex items-center gap-1.5 text-xs font-bold bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg active:scale-95 transition-all shadow"
               >
-                <Plus size={12} className="md:w-[14px] md:h-[14px]" /> Add
+                <Plus size={14} /> 선택지 추가
               </button>
             </div>
             
-            <div className="space-y-2 md:space-y-3">
-              {localData.choices?.map((choice: any, idx: number) => (
-                <div key={idx} className="bg-white p-2.5 md:p-3 rounded-xl border border-gray-200 shadow-sm space-y-2 relative hover:border-blue-400 transition-colors">
-                  <input 
-                    value={choice.label}
-                    onChange={(e) => updateChoice(idx, 'label', e.target.value)}
-                    placeholder={`선택지 ${idx + 1}`}
-                    className="w-full text-xs md:text-sm font-bold text-black border border-gray-200 rounded-lg py-2 px-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
-                  />
-                  
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] md:text-xs font-bold text-gray-400 shrink-0">To:</span>
-                    <select
-                      value={choice.targetNodeId}
-                      onChange={(e) => updateChoice(idx, 'targetNodeId', e.target.value)}
-                      className="flex-1 text-xs p-2 bg-gray-50 border border-gray-200 rounded-lg text-black font-medium outline-none cursor-pointer min-w-0"
+            {localData.choices?.length > 0 ? (
+              <div className="space-y-3">
+                {localData.choices?.map((choice: any, idx: number) => (
+                  <div key={idx} className="bg-white p-3 md:p-4 rounded-xl border-2 border-gray-200 shadow-sm space-y-2 relative hover:border-blue-400 transition-colors">
+                    <input 
+                      value={choice.label}
+                      onChange={(e) => updateChoice(idx, 'label', e.target.value)}
+                      placeholder={`선택지 ${idx + 1} 텍스트`}
+                      className="w-full text-sm md:text-base font-bold text-black border-2 border-gray-200 rounded-lg py-2 px-3 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                    />
+                    
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-gray-500 shrink-0">연결 →</span>
+                      <select
+                        value={choice.targetNodeId}
+                        onChange={(e) => updateChoice(idx, 'targetNodeId', e.target.value)}
+                        className="flex-1 text-sm p-2 bg-gray-50 border-2 border-gray-200 rounded-lg text-black font-medium outline-none cursor-pointer min-w-0 focus:border-blue-500 transition-all"
+                      >
+                        <option value="">(다음 장면 선택)</option>
+                        {nodes
+                          .filter((n) => n.id !== selectedNodeId)
+                          .map((n) => (
+                            <option key={n.id} value={n.id}>
+                              {n.data.label}
+                            </option>
+                          ))}
+                      </select>
+                    </div>
+                    <button 
+                      onClick={() => removeChoice(idx)} 
+                      className="absolute -top-2 -right-2 bg-red-500 text-white border-2 border-white rounded-full p-1.5 hover:bg-red-600 transition-colors shadow-md active:scale-90"
                     >
-                      <option value="">(연결 선택)</option>
-                      {nodes
-                        .filter((n) => n.id !== selectedNodeId)
-                        .map((n) => (
-                          <option key={n.id} value={n.id}>
-                            {n.data.label}
-                          </option>
-                        ))}
-                    </select>
+                      <Trash2 size={12} />
+                    </button>
                   </div>
-                  <button 
-                    onClick={() => removeChoice(idx)} 
-                    className="absolute -top-2 -right-2 bg-white text-gray-300 border border-gray-200 rounded-full p-1 hover:text-red-500 hover:border-red-500 transition-colors shadow-sm active:scale-90"
-                  >
-                    <Trash2 size={10} className="md:w-3 md:h-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6 text-gray-400 text-sm">
+                선택지가 없습니다. 추가 버튼을 눌러 생성하세요.
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="p-3 md:p-4 bg-white border-t shrink-0">
+        <div className="p-4 bg-white border-t shrink-0">
           <button 
             onClick={handleApply}
-            className="w-full bg-black text-white font-bold py-2.5 md:py-3 rounded-xl hover:bg-gray-800 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-3 rounded-xl active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2"
           >
-            <Check size={16} className="md:w-[18px] md:h-[18px]" />
-            Apply
+            <Check size={18} />
+            적용하기
           </button>
         </div>
       </div>
