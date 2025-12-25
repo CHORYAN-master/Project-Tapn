@@ -53,16 +53,18 @@ export default function Sidebar() {
 
       const newBlob = await response.json();
       setLocalData({ ...localData, videoUrl: newBlob.url });
-      alert("☁️ 서버 업로드 성공!");
 
     } catch (error) {
       console.error(error);
       const objectUrl = URL.createObjectURL(file);
       setLocalData({ ...localData, videoUrl: objectUrl });
-      alert("⚠️ 임시 저장소에 저장됨");
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const clearVideo = () => {
+    setLocalData({ ...localData, videoUrl: '' });
   };
 
   const addChoice = () => {
@@ -96,6 +98,7 @@ export default function Sidebar() {
   };
 
   const isStartNode = startNodeId === selectedNodeId;
+  const isYouTube = localData.videoUrl && (localData.videoUrl.includes('youtube.com') || localData.videoUrl.includes('youtu.be'));
 
   return (
     <>
@@ -189,18 +192,35 @@ export default function Sidebar() {
               <div className="flex-grow border-t border-gray-200" />
             </div>
 
-            {localData.videoUrl && !localData.videoUrl.startsWith('blob:') ? (
+            {localData.videoUrl ? (
               <div className="relative border-2 border-green-500 rounded-xl overflow-hidden aspect-video group bg-black">
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-gray-900">
-                  <Check size={28} className="md:w-8 md:h-8 text-green-500 mb-2" />
-                  <span className="text-xs font-bold text-gray-300">영상 설정 완료</span>
-                </div>
+                {/* 썸네일 표시 - YouTube는 아이콘, MP4는 video 태그 */}
+                {isYouTube ? (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-gray-900">
+                    <Youtube size={32} className="md:w-10 md:h-10 text-red-500 mb-2" />
+                    <span className="text-xs font-bold text-gray-300">YouTube 영상</span>
+                  </div>
+                ) : (
+                  <video 
+                    src={localData.videoUrl} 
+                    className="w-full h-full object-cover"
+                    preload="metadata"
+                  />
+                )}
                 
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <label className="px-3 py-1.5 md:px-4 md:py-2 bg-white text-black rounded-full text-xs font-bold cursor-pointer hover:bg-gray-200 flex items-center gap-2">
-                    <RefreshCw size={12} className="md:w-[14px] md:h-[14px]" /> 변경
-                    <input type="file" accept="video/*" onChange={handleFileUpload} className="hidden" />
-                  </label>
+                  <div className="flex gap-2">
+                    <label className="px-3 py-1.5 md:px-4 md:py-2 bg-white text-black rounded-full text-xs font-bold cursor-pointer hover:bg-gray-200 flex items-center gap-2">
+                      <RefreshCw size={12} className="md:w-[14px] md:h-[14px]" /> 변경
+                      <input type="file" accept="video/*" onChange={handleFileUpload} className="hidden" />
+                    </label>
+                    <button 
+                      onClick={clearVideo}
+                      className="px-3 py-1.5 md:px-4 md:py-2 bg-red-500 text-white rounded-full text-xs font-bold hover:bg-red-600"
+                    >
+                      삭제
+                    </button>
+                  </div>
                 </div>
               </div>
             ) : (

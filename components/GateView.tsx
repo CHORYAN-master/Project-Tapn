@@ -63,11 +63,11 @@ export default function GateView() {
           </button>
         </form>
 
-        {/* 하단 데모 메시지 */}
+        {/* 하단 데모 메시지 - 크기 증가 */}
         <div className="text-center border-t border-gray-800 pt-6 w-full">
-          <p className="text-xs text-gray-500 font-medium leading-relaxed">
+          <p className="text-sm md:text-base text-gray-400 font-bold leading-relaxed">
             본 서비스는 TAPN의 기획, 개발 및 테스트를 위한<br/>
-            <span className="text-blue-500">데모 버전</span>입니다.
+            <span className="text-blue-400 text-base md:text-lg">데모 버전</span>입니다.
           </p>
         </div>
       </div>
