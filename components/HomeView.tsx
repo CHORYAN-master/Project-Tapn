@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useStore } from '@/store/useStore';
-import { Play, Plus, Film, Github, Code2, Map } from 'lucide-react';
+import { Play, Plus, Film, Github, Code2, Map, Users, ExternalLink } from 'lucide-react';
 
 export default function HomeView() {
   const { setView, loadPublishedProjects, setPlayingNodeId, nodes } = useStore();
@@ -64,7 +64,7 @@ export default function HomeView() {
                     </div>
                   )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 flex items-center justify-center transition-all">
-                    <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 backdrop-blur-sm scale-75 group-hover:scale-100 transition-all duration-300">
+                    <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 backdrop-blur-sm scale-75 group-group:scale-100 transition-all duration-300">
                       <Play size={20} fill="white" />
                     </div>
                   </div>
@@ -99,38 +99,99 @@ export default function HomeView() {
         )}
       </main>
 
-      <div className="fixed bottom-8 right-8 flex flex-col items-end gap-3 z-40">
-        {/* Master Plan 링크 */}
-        <a 
-          href="https://github.com/CHORYAN-master/Project-Tapn/blob/main/ROADMAP.md" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-full font-black text-sm hover:from-purple-700 hover:to-blue-700 transition-all hover:scale-105 shadow-xl"
-        >
-          <Map size={18} />
-          Master Plan
-        </a>
-
-        {/* Tech Stack */}
-        <div className="text-xs sm:text-sm font-mono text-gray-300 bg-gray-900/90 backdrop-blur-md px-5 py-4 rounded-xl border border-gray-700 flex flex-col items-end gap-2 shadow-2xl">
-          <div className="flex items-center gap-2 text-blue-400 font-bold mb-1 text-base">
-            <Code2 size={16} /> Tech Stack
-          </div>
-          <span className="font-medium">Next.js 16 (App Router)</span>
-          <span className="font-medium">ReactFlow / Zustand</span>
-          <span className="font-medium">TailwindCSS / TypeScript</span>
-        </div>
+      {/* 우측 하단 정보 박스 3개 */}
+      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-40 w-72">
         
-        {/* GitHub 링크 */}
-        <a 
-          href="https://github.com/CHORYAN-master/Project-Tapn" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="flex items-center gap-3 bg-white text-black px-6 py-3 rounded-full font-black text-sm hover:bg-gray-200 transition-all hover:scale-105 shadow-xl ring-4 ring-black/20"
-        >
-          <Github size={18} />
-          GitHub 보러가기
-        </a>
+        {/* 1. For Team - Master Plan */}
+        <div className="bg-gradient-to-br from-purple-600/90 to-blue-600/90 backdrop-blur-xl border border-purple-400/30 rounded-2xl p-4 shadow-2xl hover:scale-[1.02] transition-transform">
+          <div className="flex items-center gap-2 mb-3">
+            <Users size={18} className="text-white" />
+            <h3 className="font-black text-white text-sm uppercase tracking-wide">For Team</h3>
+          </div>
+          <a 
+            href="https://github.com/CHORYAN-master/Project-Tapn/blob/main/ROADMAP.md" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center justify-between bg-white/20 hover:bg-white/30 backdrop-blur-sm px-4 py-3 rounded-xl transition-all group"
+          >
+            <div className="flex items-center gap-2">
+              <Map size={16} className="text-white" />
+              <span className="font-bold text-white text-sm">Master Plan</span>
+            </div>
+            <ExternalLink size={14} className="text-white/70 group-hover:text-white" />
+          </a>
+          <p className="text-xs text-white/80 mt-2 leading-relaxed">서비스 로드맵 및 비전 확인</p>
+        </div>
+
+        {/* 2. For Developers - GitHub */}
+        <div className="bg-gray-900/90 backdrop-blur-xl border border-gray-700 rounded-2xl p-4 shadow-2xl hover:scale-[1.02] transition-transform">
+          <div className="flex items-center gap-2 mb-3">
+            <Code2 size={18} className="text-blue-400" />
+            <h3 className="font-black text-white text-sm uppercase tracking-wide">For Developers</h3>
+          </div>
+          <a 
+            href="https://github.com/CHORYAN-master" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center justify-between bg-white hover:bg-gray-100 px-4 py-3 rounded-xl transition-all group mb-2"
+          >
+            <div className="flex items-center gap-2">
+              <Github size={16} className="text-black" />
+              <span className="font-bold text-black text-sm">CHORYAN's GitHub</span>
+            </div>
+            <ExternalLink size={14} className="text-black/50 group-hover:text-black" />
+          </a>
+          <a 
+            href="https://github.com/CHORYAN-master/Project-Tapn" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 px-4 py-3 rounded-xl transition-all group"
+          >
+            <div className="flex items-center gap-2">
+              <Github size={16} className="text-white" />
+              <span className="font-bold text-white text-sm">Repository</span>
+            </div>
+            <ExternalLink size={14} className="text-white/50 group-hover:text-white" />
+          </a>
+        </div>
+
+        {/* 3. Tech Stack */}
+        <div className="bg-gray-900/90 backdrop-blur-xl border border-gray-700 rounded-2xl p-4 shadow-2xl">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <h3 className="font-black text-white text-sm uppercase tracking-wide">Tech Stack</h3>
+          </div>
+          <div className="space-y-2 text-xs font-mono">
+            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
+              <span className="text-gray-400">Framework</span>
+              <span className="text-white font-bold">Next.js 16</span>
+            </div>
+            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
+              <span className="text-gray-400">State</span>
+              <span className="text-white font-bold">Zustand</span>
+            </div>
+            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
+              <span className="text-gray-400">UI</span>
+              <span className="text-white font-bold">Tailwind CSS</span>
+            </div>
+            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
+              <span className="text-gray-400">Flow Editor</span>
+              <span className="text-white font-bold">ReactFlow</span>
+            </div>
+            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
+              <span className="text-gray-400">Video Player</span>
+              <span className="text-white font-bold">HTML5 + YT</span>
+            </div>
+            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
+              <span className="text-gray-400">Storage</span>
+              <span className="text-white font-bold">Vercel Blob</span>
+            </div>
+            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
+              <span className="text-gray-400">Deploy</span>
+              <span className="text-white font-bold">Vercel</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
