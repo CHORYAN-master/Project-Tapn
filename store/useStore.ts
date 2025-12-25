@@ -14,6 +14,7 @@ interface AppState {
   selectedNodeId: string | null;
   startNodeId: string | null;
   currentView: ViewState;
+  isPublished: boolean;
 
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
@@ -27,6 +28,7 @@ interface AppState {
   setView: (view: ViewState) => void;
   updateNodeData: (id: string, data: Partial<VideoNodeData>) => void;
   syncEdges: () => void;
+  publishProject: () => void;
   saveProject: () => void;
   loadProject: () => void;
   resetProject: () => void;
@@ -41,6 +43,7 @@ export const useStore = create<AppState>((set, get) => ({
   selectedNodeId: null,
   startNodeId: null,
   currentView: 'home',
+  isPublished: false,
 
   onNodesChange: (changes) => set({ nodes: applyNodeChanges(changes, get().nodes) }),
   onEdgesChange: (changes) => set({ edges: applyEdgeChanges(changes, get().edges) }),
@@ -105,9 +108,15 @@ export const useStore = create<AppState>((set, get) => ({
     set({ edges: newEdges });
   },
 
+  publishProject: () => {
+    set({ isPublished: true });
+    get().saveProject();
+    alert('🎉 TAPN에 공개되었습니다!');
+  },
+
   saveProject: () => {
-    const { nodes, edges, startNodeId } = get();
-    const data = JSON.stringify({ nodes, edges, startNodeId });
+    const { nodes, edges, startNodeId, isPublished } = get();
+    const data = JSON.stringify({ nodes, edges, startNodeId, isPublished });
     localStorage.setItem(STORAGE_KEY, data);
   },
 
@@ -119,7 +128,8 @@ export const useStore = create<AppState>((set, get) => ({
         set({ 
           nodes: parsed.nodes || [], 
           edges: parsed.edges || [],
-          startNodeId: parsed.startNodeId || null
+          startNodeId: parsed.startNodeId || null,
+          isPublished: parsed.isPublished || false
         });
       } catch (e) {
         console.error('Failed to load project:', e);
@@ -129,7 +139,7 @@ export const useStore = create<AppState>((set, get) => ({
 
   resetProject: () => {
     if (confirm('모든 내용을 초기화하시겠습니까?')) {
-      set({ nodes: [], edges: [], startNodeId: null });
+      set({ nodes: [], edges: [], startNodeId: null, isPublished: false });
       localStorage.removeItem(STORAGE_KEY);
     }
   },
