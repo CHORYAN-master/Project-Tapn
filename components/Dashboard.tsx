@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useStore } from '@/store/useStore';
-import { Plus, Edit3, Trash2, Film, Home, ArrowLeft } from 'lucide-react';
+import { Plus, Edit3, Trash2, Film, Home } from 'lucide-react';
 
 export default function Dashboard() {
   const { setView, createProject, loadDraftProjects, openProject, deleteDraft } = useStore();
@@ -31,12 +31,8 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white p-8">
       <header className="flex justify-between items-center mb-10 border-b border-gray-800 pb-6">
-        <div>
-          <h1 className="text-3xl font-black mb-1">Creative Studio</h1>
-          <p className="text-gray-400 text-sm">내 프로젝트 보관함</p>
-        </div>
         
-        {/* ✨ 홈으로 가기 버튼 개선 (더 크고 명확하게) */}
+        {/* 홈 화면으로 나가기 - 왼쪽으로 이동 */}
         <button 
           onClick={() => setView('home')} 
           className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-5 py-3 rounded-xl font-bold transition-all border border-gray-700 hover:border-gray-500 shadow-lg"
@@ -44,10 +40,15 @@ export default function Dashboard() {
           <Home size={20} /> 
           홈 화면으로 나가기
         </button>
+
+        {/* Creative Studio - 오른쪽으로 이동 */}
+        <div className="text-right">
+          <h1 className="text-3xl font-black mb-1">Creative Studio</h1>
+          <p className="text-gray-400 text-sm">내 프로젝트 보관함</p>
+        </div>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {/* 새 프로젝트 만들기 카드 */}
         <button 
           onClick={handleCreate}
           className="aspect-video rounded-xl border-2 border-dashed border-gray-700 hover:border-blue-500 bg-gray-900/50 hover:bg-gray-800 flex flex-col items-center justify-center gap-4 transition-all group"
@@ -58,7 +59,6 @@ export default function Dashboard() {
           <span className="font-bold text-gray-400 group-hover:text-blue-400">새 TAPN 만들기</span>
         </button>
 
-        {/* 내 작업물 리스트 */}
         {drafts.map((draft) => (
           <div 
             key={draft.id} 

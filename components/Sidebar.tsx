@@ -8,6 +8,7 @@ export default function Sidebar() {
   const { nodes, selectedNodeId, setSelectedNodeId, updateNodeData, startNodeId, setStartNodeId, syncEdges } = useStore();
   const [localData, setLocalData] = useState<any>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [showApplied, setShowApplied] = useState(false);
 
   useEffect(() => {
     if (selectedNodeId) {
@@ -90,6 +91,9 @@ export default function Sidebar() {
   const handleApply = () => {
     updateNodeData(selectedNodeId, localData);
     setTimeout(() => { syncEdges(); }, 100);
+    
+    setShowApplied(true);
+    setTimeout(() => setShowApplied(false), 2000);
   };
 
   const toggleStartNode = () => {
@@ -122,6 +126,12 @@ export default function Sidebar() {
             <X size={20} />
           </button>
         </div>
+
+        {showApplied && (
+          <div className="bg-green-500 text-white text-center py-2 text-sm font-bold animate-in slide-in-from-top">
+            ✓ 변경사항이 적용되었습니다
+          </div>
+        )}
 
         <div className="p-4 md:p-5 overflow-y-auto flex-1 space-y-4 md:space-y-6">
           
