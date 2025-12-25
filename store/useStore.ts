@@ -6,6 +6,7 @@ import {
   applyNodeChanges, applyEdgeChanges, addEdge, MarkerType,
 } from 'reactflow';
 import { VideoNode, ViewState, VideoNodeData, ProjectData } from '@/types/schema';
+import { SAMPLE_PROJECT } from '@/constants/sampleProject';
 
 const PUBLISHED_KEY = 'tapn-published-projects';
 const DRAFTS_KEY = 'tapn-draft-projects';
@@ -150,14 +151,31 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   openProject: (project) => {
-    set({
-      currentProjectId: project.id,
-      projectTitle: project.title,
-      nodes: project.nodes as VideoNode[],
-      edges: project.edges,
-      startNodeId: project.startNodeId,
-      currentView: 'editor'
-    });
+    // 샘플 프로젝트는 읽기 전용 모드로 열기
+    if (project.isLocked) {
+      if (!confirm('이 샘플 프로젝트는 수정할 수 없습니다.\n\n복사본을 만들어 편집하시겠습니까?')) {
+        return;
+      }
+      // 복사본 생성
+      const newId = Date.now().toString();
+      set({
+        currentProjectId: newId,
+        projectTitle: project.title.replace('🎬 샘플: ', '') + ' (복사본)',
+        nodes: JSON.parse(JSON.stringify(project.nodes)),
+        edges: JSON.parse(JSON.stringify(project.edges)),
+        startNodeId: project.startNodeId,
+        currentView: 'editor'
+      });
+    } else {
+      set({
+        currentProjectId: project.id,
+        projectTitle: project.title,
+        nodes: project.nodes as VideoNode[],
+        edges: project.edges,
+        startNodeId: project.startNodeId,
+        currentView: 'editor'
+      });
+    }
   },
 
   saveDraft: () => {
@@ -193,6 +211,13 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   deleteDraft: (id) => {
+    // 샘플 프로젝트는 삭제 불가
+    const project = get().loadDraftProjects().find(p => p.id === id);
+    if (project?.isLocked) {
+      alert("⚠️ 샘플 프로젝트는 삭제할 수 없습니다.");
+      return;
+    }
+    
     if(!confirm("프로젝트를 삭제하시겠습니까?\n(게시된 영상도 홈 화면에서 사라집니다)")) return;
     
     const drafts = get().loadDraftProjects();
@@ -238,12 +263,16 @@ export const useStore = create<AppState>((set, get) => ({
   loadPublishedProjects: () => {
     if (typeof window === 'undefined') return [];
     const data = localStorage.getItem(PUBLISHED_KEY);
-    return data ? JSON.parse(data) : [];
+    const userProjects = data ? JSON.parse(data) : [];
+    // 샘플 프로젝트를 맨 앞에 추가
+    return [SAMPLE_PROJECT, ...userProjects];
   },
 
   loadDraftProjects: () => {
     if (typeof window === 'undefined') return [];
     const data = localStorage.getItem(DRAFTS_KEY);
-    return data ? JSON.parse(data) : [];
+    const userProjects = data ? JSON.parse(data) : [];
+    // 샘플 프로젝트를 맨 앞에 추가
+    return [SAMPLE_PROJECT, ...userProjects];
   }
 }));
