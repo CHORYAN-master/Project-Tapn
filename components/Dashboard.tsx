@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useStore } from '@/store/useStore';
-import { Plus, Edit3, Trash2, Film, Home } from 'lucide-react';
+import { Plus, Edit3, Trash2, Film, Home, ArrowLeft } from 'lucide-react';
 
 export default function Dashboard() {
   const { setView, createProject, loadDraftProjects, openProject, deleteDraft } = useStore();
@@ -35,11 +35,14 @@ export default function Dashboard() {
           <h1 className="text-3xl font-black mb-1">Creative Studio</h1>
           <p className="text-gray-400 text-sm">내 프로젝트 보관함</p>
         </div>
+        
+        {/* ✨ 홈으로 가기 버튼 개선 (더 크고 명확하게) */}
         <button 
           onClick={() => setView('home')} 
-          className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors font-bold"
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-700 text-white px-5 py-3 rounded-xl font-bold transition-all border border-gray-700 hover:border-gray-500 shadow-lg"
         >
-          <Home size={18} /> TAPN 홈으로
+          <Home size={20} /> 
+          홈 화면으로 나가기
         </button>
       </header>
 

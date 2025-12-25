@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useStore } from '@/store/useStore';
-import { Play, Plus, Film } from 'lucide-react';
+import { Play, Plus, Film, Github, Code2 } from 'lucide-react';
 
 export default function HomeView() {
   const { setView, loadPublishedProjects, setPlayingNodeId, nodes } = useStore();
@@ -13,7 +13,6 @@ export default function HomeView() {
   }, [loadPublishedProjects]);
 
   const handlePlayProject = (project: any) => {
-    // 플레이용 데이터 로드
     useStore.setState({ 
       nodes: project.nodes, 
       edges: project.edges,
@@ -27,7 +26,7 @@ export default function HomeView() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white">
+    <div className="min-h-screen bg-[#0f0f0f] text-white relative pb-32">
       <header className="flex items-center justify-between px-6 py-4 sticky top-0 bg-[#0f0f0f]/95 backdrop-blur z-50 border-b border-gray-800">
         <div className="flex flex-col">
           <h1 className="text-2xl font-black tracking-tighter text-white flex items-center gap-1">
@@ -36,7 +35,6 @@ export default function HomeView() {
           <span className="text-[10px] text-gray-400 font-medium tracking-widest uppercase ml-1">make your interactive</span>
         </div>
 
-        {/* 대시보드로 이동 */}
         <button 
           onClick={() => setView('dashboard')}
           className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg hover:shadow-blue-500/20"
@@ -100,6 +98,28 @@ export default function HomeView() {
           </div>
         )}
       </main>
+
+      {/* ✨ 우측 하단 개발 스펙 & 깃허브 링크 (크게, 선명하게) */}
+      <div className="fixed bottom-8 right-8 flex flex-col items-end gap-3 z-40">
+        <div className="text-xs sm:text-sm font-mono text-gray-300 bg-gray-900/90 backdrop-blur-md px-5 py-4 rounded-xl border border-gray-700 flex flex-col items-end gap-2 shadow-2xl">
+          <div className="flex items-center gap-2 text-blue-400 font-bold mb-1 text-base">
+            <Code2 size={16} /> Tech Stack
+          </div>
+          <span className="font-medium">Next.js 14 (App Router)</span>
+          <span className="font-medium">ReactFlow / Zustand</span>
+          <span className="font-medium">TailwindCSS / TypeScript</span>
+        </div>
+        
+        <a 
+          href="https://github.com/CHORYAN-master/Project-Tapn" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 bg-white text-black px-6 py-3 rounded-full font-black text-sm hover:bg-gray-200 transition-all hover:scale-105 shadow-xl ring-4 ring-black/20"
+        >
+          <Github size={18} />
+          GitHub 보러가기
+        </a>
+      </div>
     </div>
   );
 }

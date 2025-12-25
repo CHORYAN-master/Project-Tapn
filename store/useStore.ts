@@ -11,6 +11,9 @@ const PUBLISHED_KEY = 'tapn-published-projects';
 const DRAFTS_KEY = 'tapn-draft-projects';
 
 interface AppState {
+  isAuthenticated: boolean;
+  login: (password: string) => boolean;
+
   nodes: Node[];
   edges: Edge[];
   playingNodeId: string | null;
@@ -20,7 +23,6 @@ interface AppState {
   currentView: ViewState;
   lastView: ViewState;
 
-  // 프로젝트 메타데이터
   currentProjectId: string | null;
   projectTitle: string;
 
@@ -35,10 +37,8 @@ interface AppState {
   setStartNodeId: (id: string | null) => void;
   
   setView: (view: ViewState) => void;
-  
-  // ✨ 제목 수정 액션 추가
   setProjectTitle: (title: string) => void;
-
+  
   updateNodeData: (id: string, data: Partial<VideoNodeData>) => void;
   syncEdges: () => void;
   
@@ -53,6 +53,16 @@ interface AppState {
 }
 
 export const useStore = create<AppState>((set, get) => ({
+  isAuthenticated: false,
+  
+  login: (password) => {
+    if (password === '1111') {
+      set({ isAuthenticated: true });
+      return true;
+    }
+    return false;
+  },
+
   nodes: [],
   edges: [],
   playingNodeId: null,
@@ -94,7 +104,6 @@ export const useStore = create<AppState>((set, get) => ({
     lastView: state.currentView !== 'player' ? state.currentView : state.lastView
   })),
 
-  // ✨ 제목 실시간 수정
   setProjectTitle: (title) => set({ projectTitle: title }),
   
   updateNodeData: (id, newData) => {
@@ -132,7 +141,7 @@ export const useStore = create<AppState>((set, get) => ({
   createProject: () => {
     set({
       currentProjectId: Date.now().toString(),
-      projectTitle: '제목 없는 프로젝트', // 기본값 단순화
+      projectTitle: '제목 없는 프로젝트',
       nodes: [],
       edges: [],
       startNodeId: null,
@@ -161,7 +170,7 @@ export const useStore = create<AppState>((set, get) => ({
 
     const projectData: ProjectData = {
       id: safeId,
-      title: projectTitle, // ✨ 수정된 제목 저장
+      title: projectTitle,
       thumbnail: nodes.find(n => n.id === startNodeId)?.data?.videoUrl || "",
       updatedAt: new Date().toISOString(),
       nodes, edges, startNodeId
@@ -178,19 +187,16 @@ export const useStore = create<AppState>((set, get) => ({
     }
 
     localStorage.setItem(DRAFTS_KEY, JSON.stringify(newDrafts));
-    alert("💾 제목 및 내용이 저장되었습니다!");
+    alert("💾 저장되었습니다!");
   },
 
-  // ✨ [핵심 수정] Draft 삭제 시 Published에서도 함께 삭제
   deleteDraft: (id) => {
     if(!confirm("프로젝트를 삭제하시겠습니까?\n(게시된 영상도 홈 화면에서 사라집니다)")) return;
     
-    // 1. 내 보관함(Draft)에서 삭제
     const drafts = get().loadDraftProjects();
     const newDrafts = drafts.filter(d => d.id !== id);
     localStorage.setItem(DRAFTS_KEY, JSON.stringify(newDrafts));
 
-    // 2. 홈 화면(Published) 목록에서도 삭제
     const published = get().loadPublishedProjects();
     const newPublished = published.filter(p => p.id !== id);
     localStorage.setItem(PUBLISHED_KEY, JSON.stringify(newPublished));
@@ -200,11 +206,11 @@ export const useStore = create<AppState>((set, get) => ({
 
   publishProject: () => {
     const { currentProjectId, projectTitle, nodes, edges, startNodeId } = get();
-    get().saveDraft(); // 최신 상태 저장
+    get().saveDraft();
 
     const newProject: ProjectData = {
       id: currentProjectId || Date.now().toString(),
-      title: projectTitle, // ✨ 수정된 제목으로 게시
+      title: projectTitle,
       thumbnail: nodes.find(n => n.id === startNodeId)?.data?.videoUrl || "",
       updatedAt: new Date().toISOString(),
       nodes, edges, startNodeId
