@@ -14,7 +14,7 @@ interface AppState {
   isAuthenticated: boolean;
   login: (password: string) => boolean;
 
-  nodes: Node[];
+  nodes: VideoNode[];
   edges: Edge[];
   playingNodeId: string | null;
   selectedNodeId: string | null;
@@ -73,7 +73,7 @@ export const useStore = create<AppState>((set, get) => ({
   currentProjectId: null,
   projectTitle: '제목 없는 프로젝트',
 
-  onNodesChange: (changes) => set({ nodes: applyNodeChanges(changes, get().nodes) }),
+  onNodesChange: (changes) => set({ nodes: applyNodeChanges(changes, get().nodes) as VideoNode[] }),
   onEdgesChange: (changes) => set({ edges: applyEdgeChanges(changes, get().edges) }),
   onConnect: (connection) => set({ edges: addEdge(connection, get().edges) }),
   
@@ -153,7 +153,7 @@ export const useStore = create<AppState>((set, get) => ({
     set({
       currentProjectId: project.id,
       projectTitle: project.title,
-      nodes: project.nodes,
+      nodes: project.nodes as VideoNode[],
       edges: project.edges,
       startNodeId: project.startNodeId,
       currentView: 'editor'
@@ -173,7 +173,9 @@ export const useStore = create<AppState>((set, get) => ({
       title: projectTitle,
       thumbnail: nodes.find(n => n.id === startNodeId)?.data?.videoUrl || "",
       updatedAt: new Date().toISOString(),
-      nodes, edges, startNodeId
+      nodes: nodes as VideoNode[],
+      edges,
+      startNodeId
     };
 
     const drafts = get().loadDraftProjects();
@@ -213,7 +215,9 @@ export const useStore = create<AppState>((set, get) => ({
       title: projectTitle,
       thumbnail: nodes.find(n => n.id === startNodeId)?.data?.videoUrl || "",
       updatedAt: new Date().toISOString(),
-      nodes, edges, startNodeId
+      nodes: nodes as VideoNode[],
+      edges,
+      startNodeId
     };
 
     const published = get().loadPublishedProjects();
