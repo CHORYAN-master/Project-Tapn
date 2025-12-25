@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useStore } from '@/store/useStore';
-import { X, Upload, Trash2, Plus, Check, RefreshCw, Flag, Youtube, Loader2, Film } from 'lucide-react';
+import { X, Upload, Trash2, Plus, Check, RefreshCw, Flag, Youtube, Loader2, Film, CheckCircle } from 'lucide-react';
 
 export default function Sidebar() {
   const { nodes, selectedNodeId, setSelectedNodeId, updateNodeData, startNodeId, setStartNodeId, syncEdges } = useStore();
@@ -185,29 +185,25 @@ export default function Sidebar() {
             </div>
 
             {localData.videoUrl ? (
-              <div className="relative border-2 border-green-500 rounded-xl overflow-hidden aspect-video group bg-gradient-to-br from-gray-900 to-gray-800">
-                {isYouTube ? (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <Youtube size={48} className="text-red-500 mb-3" />
-                    <span className="text-sm font-bold text-white">YouTube 영상</span>
-                    <span className="text-xs text-gray-400 mt-1">미리보기 지원 안 됨</span>
-                  </div>
-                ) : (
-                  <>
-                    <video 
-                      src={localData.videoUrl}
-                      className="w-full h-full object-cover"
-                      preload="metadata"
-                      muted
-                      playsInline
-                      onError={() => console.error('Video load error')}
-                    />
-                    <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded flex items-center gap-1">
-                      <Film size={12} />
-                      <span>MP4</span>
-                    </div>
-                  </>
-                )}
+              <div className="relative border-2 border-green-500 rounded-xl overflow-hidden aspect-video group bg-gradient-to-br from-green-50 to-blue-50">
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  {isYouTube ? (
+                    <>
+                      <Youtube size={48} className="text-red-500 mb-3" />
+                      <span className="text-sm font-bold text-gray-800">YouTube 영상</span>
+                      <span className="text-xs text-gray-500 mt-1">설정됨</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle size={48} className="text-green-500 mb-3" />
+                      <span className="text-sm font-bold text-gray-800">영상 업로드 완료</span>
+                      <div className="mt-2 bg-white/80 text-gray-600 text-xs px-3 py-1.5 rounded-full flex items-center gap-1.5">
+                        <Film size={12} />
+                        <span>MP4 파일</span>
+                      </div>
+                    </>
+                  )}
+                </div>
                 
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <div className="flex gap-2">
