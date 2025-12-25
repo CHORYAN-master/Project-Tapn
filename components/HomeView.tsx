@@ -2,11 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { useStore } from '@/store/useStore';
-import { Play, Plus, Film, Github, Code2, Map, Users, ExternalLink } from 'lucide-react';
+import { Play, Plus, Film, Github, Code2, Map, Users, ExternalLink, Info, X } from 'lucide-react';
 
 export default function HomeView() {
   const { setView, loadPublishedProjects, setPlayingNodeId, nodes } = useStore();
   const [projects, setProjects] = useState<any[]>([]);
+  const [showAbout, setShowAbout] = useState(false);
 
   useEffect(() => {
     setProjects(loadPublishedProjects());
@@ -64,7 +65,7 @@ export default function HomeView() {
                     </div>
                   )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 flex items-center justify-center transition-all">
-                    <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 backdrop-blur-sm scale-75 group-group:scale-100 transition-all duration-300">
+                    <div className="w-12 h-12 bg-black/60 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 backdrop-blur-sm scale-75 group-hover:scale-100 transition-all duration-300">
                       <Play size={20} fill="white" />
                     </div>
                   </div>
@@ -99,100 +100,130 @@ export default function HomeView() {
         )}
       </main>
 
-      {/* 우측 하단 정보 박스 3개 */}
-      <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-40 w-72">
-        
-        {/* 1. For Team - Master Plan */}
-        <div className="bg-gradient-to-br from-purple-600/90 to-blue-600/90 backdrop-blur-xl border border-purple-400/30 rounded-2xl p-4 shadow-2xl hover:scale-[1.02] transition-transform">
-          <div className="flex items-center gap-2 mb-3">
-            <Users size={18} className="text-white" />
-            <h3 className="font-black text-white text-sm uppercase tracking-wide">For Team</h3>
-          </div>
-          <a 
-            href="https://github.com/CHORYAN-master/Project-Tapn/blob/main/ROADMAP.md" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center justify-between bg-white/20 hover:bg-white/30 backdrop-blur-sm px-4 py-3 rounded-xl transition-all group"
-          >
-            <div className="flex items-center gap-2">
-              <Map size={16} className="text-white" />
-              <span className="font-bold text-white text-sm">Master Plan</span>
-            </div>
-            <ExternalLink size={14} className="text-white/70 group-hover:text-white" />
-          </a>
-          <p className="text-xs text-white/80 mt-2 leading-relaxed">서비스 로드맵 및 비전 확인</p>
-        </div>
+      {/* About TAPN 버튼 */}
+      <button
+        onClick={() => setShowAbout(true)}
+        className="fixed bottom-6 right-6 flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-full font-bold shadow-2xl hover:scale-105 transition-all z-40"
+      >
+        <Info size={20} />
+        About TAPN
+      </button>
 
-        {/* 2. For Developers - GitHub */}
-        <div className="bg-gray-900/90 backdrop-blur-xl border border-gray-700 rounded-2xl p-4 shadow-2xl hover:scale-[1.02] transition-transform">
-          <div className="flex items-center gap-2 mb-3">
-            <Code2 size={18} className="text-blue-400" />
-            <h3 className="font-black text-white text-sm uppercase tracking-wide">For Developers</h3>
-          </div>
-          <a 
-            href="https://github.com/CHORYAN-master" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center justify-between bg-white hover:bg-gray-100 px-4 py-3 rounded-xl transition-all group mb-2"
-          >
-            <div className="flex items-center gap-2">
-              <Github size={16} className="text-black" />
-              <span className="font-bold text-black text-sm">CHORYAN's GitHub</span>
-            </div>
-            <ExternalLink size={14} className="text-black/50 group-hover:text-black" />
-          </a>
-          <a 
-            href="https://github.com/CHORYAN-master/Project-Tapn" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 px-4 py-3 rounded-xl transition-all group"
-          >
-            <div className="flex items-center gap-2">
-              <Github size={16} className="text-white" />
-              <span className="font-bold text-white text-sm">Repository</span>
-            </div>
-            <ExternalLink size={14} className="text-white/50 group-hover:text-white" />
-          </a>
-        </div>
+      {/* About Modal */}
+      {showAbout && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
+            onClick={() => setShowAbout(false)}
+          />
+          <div className="fixed inset-0 flex items-center justify-center p-4 z-50 pointer-events-none">
+            <div className="bg-[#0f0f0f] border border-gray-700 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl pointer-events-auto">
+              
+              {/* 헤더 */}
+              <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 p-6 flex justify-between items-center">
+                <h2 className="text-2xl font-black text-white flex items-center gap-2">
+                  <Info size={24} />
+                  About TAPN
+                </h2>
+                <button 
+                  onClick={() => setShowAbout(false)}
+                  className="text-white hover:bg-white/20 p-2 rounded-full transition-colors"
+                >
+                  <X size={24} />
+                </button>
+              </div>
 
-        {/* 3. Tech Stack */}
-        <div className="bg-gray-900/90 backdrop-blur-xl border border-gray-700 rounded-2xl p-4 shadow-2xl">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            <h3 className="font-black text-white text-sm uppercase tracking-wide">Tech Stack</h3>
+              {/* 콘텐츠 */}
+              <div className="p-6 space-y-4">
+                
+                {/* 1. For Team */}
+                <div className="bg-gradient-to-br from-purple-600/20 to-blue-600/20 border border-purple-500/30 rounded-xl p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Users size={18} className="text-purple-400" />
+                    <h3 className="font-black text-white text-base uppercase tracking-wide">For Team</h3>
+                  </div>
+                  <a 
+                    href="https://github.com/CHORYAN-master/Project-Tapn/blob/main/ROADMAP.md" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between bg-white/10 hover:bg-white/20 backdrop-blur-sm px-4 py-3 rounded-lg transition-all group"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Map size={16} className="text-white" />
+                      <span className="font-bold text-white text-sm">Master Plan</span>
+                    </div>
+                    <ExternalLink size={14} className="text-white/70 group-hover:text-white" />
+                  </a>
+                  <p className="text-xs text-gray-300 mt-2">서비스 로드맵 및 비전 확인</p>
+                </div>
+
+                {/* 2. For Developers */}
+                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Code2 size={18} className="text-blue-400" />
+                    <h3 className="font-black text-white text-base uppercase tracking-wide">For Developers</h3>
+                  </div>
+                  <a 
+                    href="https://github.com/CHORYAN-master/Project-Tapn" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between bg-white hover:bg-gray-100 px-4 py-3 rounded-lg transition-all group"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Github size={16} className="text-black" />
+                      <span className="font-bold text-black text-sm">GitHub Repository</span>
+                    </div>
+                    <ExternalLink size={14} className="text-black/50 group-hover:text-black" />
+                  </a>
+                  <p className="text-xs text-gray-300 mt-2">소스 코드 및 이슈 트래킹</p>
+                </div>
+
+                {/* 3. Tech Stack */}
+                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                    <h3 className="font-black text-white text-base uppercase tracking-wide">Tech Stack</h3>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                    <div className="flex flex-col gap-1 py-2 px-3 bg-gray-900/50 rounded">
+                      <span className="text-gray-400">Framework</span>
+                      <span className="text-white font-bold">Next.js 16</span>
+                    </div>
+                    <div className="flex flex-col gap-1 py-2 px-3 bg-gray-900/50 rounded">
+                      <span className="text-gray-400">State</span>
+                      <span className="text-white font-bold">Zustand</span>
+                    </div>
+                    <div className="flex flex-col gap-1 py-2 px-3 bg-gray-900/50 rounded">
+                      <span className="text-gray-400">UI</span>
+                      <span className="text-white font-bold">Tailwind CSS</span>
+                    </div>
+                    <div className="flex flex-col gap-1 py-2 px-3 bg-gray-900/50 rounded">
+                      <span className="text-gray-400">Flow Editor</span>
+                      <span className="text-white font-bold">ReactFlow</span>
+                    </div>
+                    <div className="flex flex-col gap-1 py-2 px-3 bg-gray-900/50 rounded">
+                      <span className="text-gray-400">Video</span>
+                      <span className="text-white font-bold">HTML5 + YT</span>
+                    </div>
+                    <div className="flex flex-col gap-1 py-2 px-3 bg-gray-900/50 rounded">
+                      <span className="text-gray-400">Storage</span>
+                      <span className="text-white font-bold">Vercel Blob</span>
+                    </div>
+                    <div className="flex flex-col gap-1 py-2 px-3 bg-gray-900/50 rounded">
+                      <span className="text-gray-400">Deploy</span>
+                      <span className="text-white font-bold">Vercel</span>
+                    </div>
+                    <div className="flex flex-col gap-1 py-2 px-3 bg-gray-900/50 rounded">
+                      <span className="text-gray-400">Icons</span>
+                      <span className="text-white font-bold">Lucide React</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="space-y-2 text-xs font-mono">
-            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
-              <span className="text-gray-400">Framework</span>
-              <span className="text-white font-bold">Next.js 16</span>
-            </div>
-            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
-              <span className="text-gray-400">State</span>
-              <span className="text-white font-bold">Zustand</span>
-            </div>
-            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
-              <span className="text-gray-400">UI</span>
-              <span className="text-white font-bold">Tailwind CSS</span>
-            </div>
-            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
-              <span className="text-gray-400">Flow Editor</span>
-              <span className="text-white font-bold">ReactFlow</span>
-            </div>
-            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
-              <span className="text-gray-400">Video Player</span>
-              <span className="text-white font-bold">HTML5 + YT</span>
-            </div>
-            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
-              <span className="text-gray-400">Storage</span>
-              <span className="text-white font-bold">Vercel Blob</span>
-            </div>
-            <div className="flex items-center justify-between py-1.5 px-2 bg-gray-800/50 rounded">
-              <span className="text-gray-400">Deploy</span>
-              <span className="text-white font-bold">Vercel</span>
-            </div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }

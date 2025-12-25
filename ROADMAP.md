@@ -71,24 +71,24 @@
 
 ## 4. MVP 미구현 스코프
 
-**목표**: 플랫폼의 안정성 확보 및 커뮤니티 생태계 구축
+플랫폼의 안정성 확보 및 커뮤니티 생태계 구축 필요
 
-### 📅 Phase 1: 인프라 구축 (Backend & Data)
+### 1: 인프라 구축 (Backend & Data)
 * **Database**: Supabase/Firebase 연동을 통한 데이터 영구 저장 (현재 LocalStorage 대체)
 * **Storage**: 영상 및 썸네일 이미지의 클라우드(AWS S3) 호스팅
 * **Auth**: 구글, 이메일 등 실제 유저 로그인/회원가입 시스템
 
-### 📅 Phase 2: 소셜 & 커뮤니티 (Social)
+### 2: 소셜 & 커뮤니티 (Social)
 * **Creator Profile**: 크리에이터별 채널 페이지 및 구독 시스템
 * **Engagement**: 영상 단위 좋아요, 댓글, 공유하기(Share Link) 기능
 * **Analytics**: 내 영상의 선택 통계(몇 %가 A를 선택했는지) 제공
 
-### 📅 Phase 3: 성능 최적화 (Performance)
+### 3: 성능 최적화 (Performance)
 * **Pre-loading**: 다음 이어질 영상들을 미리 로딩하여 버퍼링 없는 'Zero-Latency' 경험 제공
 * **Mobile Optimization**: 모바일 터치 환경에 최적화된 제스처 및 반응형 UI 강화
 
 ---
 
-**Last Updated**: December 25, 2024  
+**Last Updated**: December 26, 2025  
 **Version**: 1.0.0  
 **Status**: Foundation Complete ✅
