@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useStore } from '@/store/useStore';
-import { Play, Plus, Film, Github, Code2 } from 'lucide-react';
+import { Play, Plus, Film, Github, Code2, Map } from 'lucide-react';
 
 export default function HomeView() {
   const { setView, loadPublishedProjects, setPlayingNodeId, nodes } = useStore();
@@ -99,17 +99,29 @@ export default function HomeView() {
         )}
       </main>
 
-      {/* ✨ 우측 하단 개발 스펙 & 깃허브 링크 (크게, 선명하게) */}
       <div className="fixed bottom-8 right-8 flex flex-col items-end gap-3 z-40">
+        {/* Master Plan 링크 */}
+        <a 
+          href="https://github.com/CHORYAN-master/Project-Tapn/blob/main/ROADMAP.md" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-full font-black text-sm hover:from-purple-700 hover:to-blue-700 transition-all hover:scale-105 shadow-xl"
+        >
+          <Map size={18} />
+          Master Plan
+        </a>
+
+        {/* Tech Stack */}
         <div className="text-xs sm:text-sm font-mono text-gray-300 bg-gray-900/90 backdrop-blur-md px-5 py-4 rounded-xl border border-gray-700 flex flex-col items-end gap-2 shadow-2xl">
           <div className="flex items-center gap-2 text-blue-400 font-bold mb-1 text-base">
             <Code2 size={16} /> Tech Stack
           </div>
-          <span className="font-medium">Next.js 14 (App Router)</span>
+          <span className="font-medium">Next.js 16 (App Router)</span>
           <span className="font-medium">ReactFlow / Zustand</span>
           <span className="font-medium">TailwindCSS / TypeScript</span>
         </div>
         
+        {/* GitHub 링크 */}
         <a 
           href="https://github.com/CHORYAN-master/Project-Tapn" 
           target="_blank" 
